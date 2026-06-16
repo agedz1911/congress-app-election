@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Count & Dashboard - KONAS XX PERHATI-KL</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN untuk Diagram Interaktif -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen">
+
+    <!-- TOP HEADER -->
+    <header class="bg-slate-900 text-white border-b border-slate-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse"></span>
+                <h1 class="font-bold text-lg tracking-tight">DASHBOARD REAL-TIME E-VOTING</h1>
+            </div>
+            <div class="text-right sm:text-right">
+                <p class="text-xs text-slate-400">KONAS XX PERHATI-KL 2025</p>
+                <p class="text-xs text-slate-500 font-mono mt-0.5" id="liveClock">Memuat waktu...</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN DASHBOARD CONTENT -->
+    <main class="max-w-7xl mx-auto px-6 py-8">
+        
+        <!-- CARD STATISTIK / KPI -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <!-- Total Data DPT -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                <div>
+                    <span class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Total DPT</span>
+                    <h3 class="text-3xl font-bold text-slate-900 mt-1">960</h3>
+                </div>
+                <div class="p-3 bg-blue-50 text-blue-600 rounded-xl">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                </div>
+            </div>
+            <!-- Suara Masuk -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                <div>
+                    <span class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Suara Masuk</span>
+                    <h3 class="text-3xl font-bold text-emerald-600 mt-1">637</h3>
+                </div>
+                <div class="p-3 bg-emerald-50 text-emerald-600 rounded-xl">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+            </div>
+            <!-- Belum Memilih -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                <div>
+                    <span class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Belum Memilih</span>
+                    <h3 class="text-3xl font-bold text-rose-500 mt-1">323</h3>
+                </div>
+                <div class="p-3 bg-rose-50 text-rose-600 rounded-xl">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                </div>
+            </div>
+            <!-- Tingkat Partisipasi -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                <div>
+                    <span class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Partisipasi</span>
+                    <h3 class="text-3xl font-bold text-slate-900 mt-1">66,3%</h3>
+                </div>
+                <div class="p-3 bg-indigo-50 text-indigo-600 rounded-xl">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.003 9.003 0 1020.945 13H11V3.055z"/></svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- DIAGRAM DAN DETAIL PEROLEHAN SUARA -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+            
+            <!-- Donut Chart Box -->
+            <div class="lg:col-span-1 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between relative overflow-hidden">
+                <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
+                    <h2 class="font-bold text-slate-900">Diagram Perolehan</h2>
+                    <span class="flex items-center gap-1.5 text-xs text-rose-600 font-semibold bg-rose-50 px-2.5 py-1 rounded-full animate-pulse">
+                        <span class="w-1.5 h-1.5 rounded-full bg-rose-600"></span> LIVE
+                    </span>
+                </div>
+                
+                <!-- Chart Wrapper -->
+                <div class="relative w-64 h-64 mx-auto my-4 flex items-center justify-center">
+                    <canvas id="liveChart"></canvas>
+                    <!-- Center Total Number -->
+                    <div class="absolute flex flex-col items-center justify-center pointer-events-none">
+                        <span class="text-xs text-slate-400 font-medium tracking-wider uppercase">Total</span>
+                        <span class="text-4xl font-extrabold text-slate-800 tracking-tight">637</span>
+                        <span class="text-[10px] text-slate-400">Suara</span>
+                    </div>
+                </div>
+
+                <p class="text-center text-xs text-slate-400 mt-2">Diagram otomatis diperbarui setiap kali ada suara masuk.</p>
+            </div>
+
+            <!-- Detail Perolehan (Legend Cards) -->
+            <div class="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                <div class="flex items-center justify-between mb-6 border-b border-slate-100 pb-3">
+                    <h2 class="font-bold text-slate-900">Rincian Perolehan Suara</h2>
+                    <span class="text-xs text-slate-500 font-medium">Diurutkan berdasarkan nomor urut</span>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- Calon 01 -->
+                    <div class="p-4 rounded-xl border border-rose-100 bg-rose-50/10 hover:bg-rose-50/20 transition-all duration-200">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-3">
+                            <div class="flex items-center gap-3">
+                                <span class="w-8 h-8 rounded-lg bg-rose-500 text-white font-extrabold text-sm flex items-center justify-center">01</span>
+                                <div>
+                                    <h4 class="font-bold text-slate-900 text-sm sm:text-base">Prof. Dr. dr. Achmad Chusnu Romdhoni, Sp.THT-BKL, Subsp.Onk. (K). FICS</h4>
+                                </div>
+                            </div>
+                            <div class="text-right sm:text-right min-w-[100px]">
+                                <span class="text-rose-600 font-extrabold text-xl">341 <span class="text-xs text-slate-500 font-normal">Suara</span></span>
+                            </div>
+                        </div>
+                        <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+                            <div class="bg-rose-500 h-full rounded-full transition-all duration-1000" style="width: 53.5%"></div>
+                        </div>
+                        <div class="flex justify-between text-[11px] text-slate-400 mt-2 font-medium">
+                            <span>Persentase Suara Masuk</span>
+                            <span>53,53%</span>
+                        </div>
+                    </div>
+
+                    <!-- Calon 02 -->
+                    <div class="p-4 rounded-xl border border-emerald-100 bg-emerald-50/10 hover:bg-emerald-50/20 transition-all duration-200">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-3">
+                            <div class="flex items-center gap-3">
+                                <span class="w-8 h-8 rounded-lg bg-emerald-500 text-white font-extrabold text-sm flex items-center justify-center">02</span>
+                                <div>
+                                    <h4 class="font-bold text-slate-900 text-sm sm:text-base">Dr. Marlinda Adham, Sp.T.H.T.B.K.I, Subsp.Onk. (K)., PhD., FACS</h4>
+                                </div>
+                            </div>
+                            <div class="text-right sm:text-right min-w-[100px]">
+                                <span class="text-emerald-600 font-extrabold text-xl">293 <span class="text-xs text-slate-500 font-normal">Suara</span></span>
+                            </div>
+                        </div>
+                        <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+                            <div class="bg-emerald-500 h-full rounded-full transition-all duration-1000" style="width: 45.9%"></div>
+                        </div>
+                        <div class="flex justify-between text-[11px] text-slate-400 mt-2 font-medium">
+                            <span>Persentase Suara Masuk</span>
+                            <span>45,99%</span>
+                        </div>
+                    </div>
+
+                    <!-- Abstain -->
+                    <div class="p-4 rounded-xl border border-blue-100 bg-blue-50/10 hover:bg-blue-50/20 transition-all duration-200">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-3">
+                            <div class="flex items-center gap-3">
+                                <span class="w-8 h-8 rounded-lg bg-blue-500 text-white font-extrabold text-sm flex items-center justify-center">-</span>
+                                <div>
+                                    <h4 class="font-bold text-slate-900 text-sm">Abstain (Suara Tidak Sah / Kosong)</h4>
+                                </div>
+                            </div>
+                            <div class="text-right sm:text-right min-w-[100px]">
+                                <span class="text-blue-600 font-extrabold text-xl">3 <span class="text-xs text-slate-500 font-normal">Suara</span></span>
+                            </div>
+                        </div>
+                        <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                            <div class="bg-blue-500 h-full rounded-full transition-all duration-1000" style="width: 0.5%"></div>
+                        </div>
+                        <div class="flex justify-between text-[11px] text-slate-400 mt-2 font-medium">
+                            <span>Persentase Suara Masuk</span>
+                            <span>0,47%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- LOG AKTIVITAS / DATA PEMILIH TABLE CARD -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            
+            <!-- Table Header Controls -->
+            <div class="p-6 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h2 class="font-bold text-slate-900 text-lg">Log Aktivitas & Data Pemilih</h2>
+                    <p class="text-xs text-slate-400 mt-1">Menampilkan data kehadiran serta status voting peserta</p>
+                </div>
+                
+                <!-- Action Buttons & Search -->
+                <div class="flex flex-wrap items-center gap-3">
+                    <button class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl transition-colors duration-150 shadow-sm shadow-emerald-100">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                        Export Excel
+                    </button>
+                    <select class="border border-slate-200 bg-white text-xs font-medium text-slate-600 rounded-xl px-3 py-2 focus:ring-2 focus:ring-blue-100 outline-none">
+                        <option>-- PILIH AKSI --</option>
+                        <option>Kirim Pengingat (Belum Voting)</option>
+                        <option>Hapus Data Terpilih</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Table Container (Responsive) -->
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm text-slate-600">
+                    <thead class="bg-slate-50 text-[11px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100">
+                        <tr>
+                            <th class="p-4 w-12 text-center"><input type="checkbox" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500"></th>
+                            <th class="p-4 w-16">No.</th>
+                            <th class="p-4">Kode ID 1</th>
+                            <th class="p-4">Kode ID 2</th>
+                            <th class="p-4">Nama Peserta</th>
+                            <th class="p-4">Instansi / Rumah Sakit</th>
+                            <th class="p-4">ID Anggota</th>
+                            <th class="p-4">Status Voting</th>
+                            <th class="p-4">Waktu Voting</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        <!-- Row 1 -->
+                        <tr class="hover:bg-slate-50/50 transition-colors duration-100">
+                            <td class="p-4 text-center"><input type="checkbox" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500"></td>
+                            <td class="p-4 font-semibold text-slate-700">25.</td>
+                            <td class="p-4 font-mono text-xs">V-0936</td>
+                            <td class="p-4 font-mono text-xs text-slate-400">R-0404</td>
+                            <td class="p-4 font-semibold text-slate-900">Mohamad Bima Mandraguna</td>
+                            <td class="p-4 text-slate-500">RSUD Karawang</td>
+                            <td class="p-4 font-mono text-xs text-slate-400">1101212014</td>
+                            <td class="p-4">
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Sudah Voting
+                                </span>
+                            </td>
+                            <td class="p-4 font-mono text-xs text-slate-500">31-10-25 21:39:32</td>
+                        </tr>
+                        <!-- Row 2 -->
+                        <tr class="hover:bg-slate-50/50 transition-colors duration-100">
+                            <td class="p-4 text-center"><input type="checkbox" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500"></td>
+                            <td class="p-4 font-semibold text-slate-700">26.</td>
+                            <td class="p-4 font-mono text-xs">V-0935</td>
+                            <td class="p-4 font-mono text-xs text-slate-400">R-1054</td>
+                            <td class="p-4 font-semibold text-slate-900">Inda Rizkia Oktaviani</td>
+                            <td class="p-4 text-slate-500">Santosa Hospital Bandung Kopo</td>
+                            <td class="p-4 font-mono text-xs text-slate-400">97195</td>
+                            <td class="p-4">
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Sudah Voting
+                                </span>
+                            </td>
+                            <td class="p-4 font-mono text-xs text-slate-500">31-10-25 21:34:00</td>
+                        </tr>
+                        <!-- Row 3 -->
+                        <tr class="hover:bg-slate-50/50 transition-colors duration-100">
+                            <td class="p-4 text-center"><input type="checkbox" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500"></td>
+                            <td class="p-4 font-semibold text-slate-700">27.</td>
+                            <td class="p-4 font-mono text-xs">V-0934</td>
+                            <td class="p-4 font-mono text-xs text-slate-400">R-1413</td>
+                            <td class="p-4 font-semibold text-slate-900">Budhy Parmono</td>
+                            <td class="p-4 text-slate-500">RS Krakatau Medika</td>
+                            <td class="p-4 font-mono text-xs text-slate-400">1000212006</td>
+                            <td class="p-4">
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Sudah Voting
+                                </span>
+                            </td>
+                            <td class="p-4 font-mono text-xs text-slate-500">31-10-25 21:27:52</td>
+                        </tr>
+                        <!-- Row 4 -->
+                        <tr class="hover:bg-slate-50/50 transition-colors duration-100 bg-rose-50/5">
+                            <td class="p-4 text-center"><input type="checkbox" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500"></td>
+                            <td class="p-4 font-semibold text-slate-700">28.</td>
+                            <td class="p-4 font-mono text-xs">V-0933</td>
+                            <td class="p-4 font-mono text-xs text-slate-400">R-1130</td>
+                            <td class="p-4 font-semibold text-slate-900">Heru Kurniawan Anwar</td>
+                            <td class="p-4 text-slate-500">RSUD Kota Bengkulu</td>
+                            <td class="p-4 font-mono text-xs text-slate-400">85082</td>
+                            <td class="p-4">
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-100">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span> Belum Voting
+                                </span>
+                            </td>
+                            <td class="p-4 font-mono text-xs text-slate-400">-</td>
+                        </tr>
+                        <!-- Row 5 -->
+                        <tr class="hover:bg-slate-50/50 transition-colors duration-100">
+                            <td class="p-4 text-center"><input type="checkbox" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500"></td>
+                            <td class="p-4 font-semibold text-slate-700">29.</td>
+                            <td class="p-4 font-mono text-xs">V-0932</td>
+                            <td class="p-4 font-mono text-xs text-slate-400">R-0600</td>
+                            <td class="p-4 font-semibold text-slate-900">Nieza Femini Rissa</td>
+                            <td class="p-4 text-slate-500">RS M.M.C</td>
+                            <td class="p-4 font-mono text-xs text-slate-400">900090590</td>
+                            <td class="p-4">
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Sudah Voting
+                                </span>
+                            </td>
+                            <td class="p-4 font-mono text-xs text-slate-500">31-10-25 21:32:48</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Table Footer & Pagination -->
+            <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <span class="text-xs text-slate-500">Menampilkan 5 data teratas dari total <strong class="text-slate-800">960</strong> data</span>
+                
+                <!-- Modern Pagination -->
+                <div class="flex items-center gap-1 text-xs">
+                    <button class="px-3 py-1.5 border border-slate-200 bg-white hover:bg-slate-100 rounded-lg text-slate-600 transition-colors font-medium">Pertama</button>
+                    <button class="px-3 py-1.5 border border-slate-200 bg-white hover:bg-slate-100 rounded-lg text-slate-600 transition-colors font-medium">Sebelumnya</button>
+                    <button class="px-3.5 py-1.5 bg-blue-600 text-white rounded-lg font-bold">1</button>
+                    <button class="px-3.5 py-1.5 border border-slate-200 bg-white hover:bg-slate-100 rounded-lg text-slate-600 transition-colors">2</button>
+                    <button class="px-3.5 py-1.5 border border-slate-200 bg-white hover:bg-slate-100 rounded-lg text-slate-600 transition-colors">3</button>
+                    <span class="px-1 text-slate-400">...</span>
+                    <button class="px-3.5 py-1.5 border border-slate-200 bg-white hover:bg-slate-100 rounded-lg text-slate-600 transition-colors">20</button>
+                    <button class="px-3 py-1.5 border border-slate-200 bg-white hover:bg-slate-100 rounded-lg text-slate-600 transition-colors font-medium">Berikutnya</button>
+                    <button class="px-3 py-1.5 border border-slate-200 bg-white hover:bg-slate-100 rounded-lg text-slate-600 transition-colors font-medium">Terakhir</button>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-400 mt-12">
+        <p>&copy; 2025 PERHATI-KL Indonesia. All Rights Reserved. Powered by IT Commitee KONAS XX.</p>
+    </footer>
+
+    <!-- INTERACTIVE SCRIPTS -->
+    <script>
+        // 1. Live Clock
+        function updateClock() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            document.getElementById('liveClock').textContent = now.toLocaleDateString('id-ID', options) + ' WIB';
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // 2. Chart.js Implementation for Real-Time Donut Chart
+        const ctx = document.getElementById('liveChart').getContext('2d');
+        const liveChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Calon 01 (Prof. Dr. dr. Achmad Chusnu Romdhoni)', 'Calon 02 (Dr. Marlinda Adham)', 'Abstain'],
+                datasets: [{
+                    data: [341, 293, 3],
+                    backgroundColor: [
+                        '#F43F5E', // Rose-500 (Calon 01)
+                        '#10B981', // Emerald-500 (Calon 02)
+                        '#3B82F6'  // Blue-500 (Abstain)
+                    ],
+                    borderColor: '#ffffff',
+                    borderWidth: 4,
+                    hoverOffset: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '75%', // Ketebalan donut chart
+                plugins: {
+                    legend: {
+                        display: false // Sembunyikan legenda bawaan Chart.js agar bisa memakai UI kostum di sampingnya
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed !== null) {
+                                    const percentage = ((context.parsed / 637) * 100).toFixed(2);
+                                    label += `${context.parsed} Suara (${percentage}%)`;
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
