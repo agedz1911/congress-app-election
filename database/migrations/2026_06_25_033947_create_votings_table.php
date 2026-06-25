@@ -11,15 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('candidates', function (Blueprint $table) {
+        Schema::create('votings', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->unsignedInteger('no_urut')->unique();
-            $table->string('name');
-            $table->string('title')->nullable();
-            $table->string('photo')->nullable();
-            $table->text('vision')->nullable();
-            $table->text('mission')->nullable();
-            $table->text('description')->nullable();
+            $table->string('voting_number')->unique();
+            $table->foreignUuid('participant_id')->constrained('participants')->nullOnDelete();
+            $table->foreignUuid('candidate_id')->constrained('candidates')->nullOnDelete();
+            $table->timestamp('voting_time')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
@@ -30,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('candidates');
+        Schema::dropIfExists('votings');
     }
 };

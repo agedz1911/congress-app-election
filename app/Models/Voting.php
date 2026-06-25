@@ -7,22 +7,24 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Candidate extends Model
+class Voting extends Model
 {
     use HasFactory, SoftDeletes, HasUuids;
 
     protected $fillable = [
-        'no_urut',
-        'name',
-        'title',
-        'photo',
-        'vision',
-        'mission',
-        'description',
+        'voting_number',
+        'participant_id',
+        'candidate_id',
+        'voting_time',
     ];
 
-    public function votings()
+    public function participant()
     {
-        return $this->hasMany(Voting::class);
+        return $this->belongsTo(Participant::class);
+    }
+
+    public function candidate()
+    {
+        return $this->belongsTo(Candidate::class);
     }
 }
