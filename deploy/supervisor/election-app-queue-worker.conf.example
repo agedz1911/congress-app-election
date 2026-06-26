@@ -1,0 +1,16 @@
+[program:election-app-queue-worker]
+process_name=%(program_name)s_%(process_num)02d
+directory=/var/www/election-app
+command=/usr/bin/php artisan queue:work redis --queue=realtime,default --sleep=1 --tries=3 --timeout=60 --backoff=5 --max-time=3600 --memory=256
+autostart=true
+autorestart=true
+stopasgroup=true
+killasgroup=true
+user=www-data
+numprocs=2
+redirect_stderr=true
+stdout_logfile=/var/www/election-app/storage/logs/queue-worker.log
+stdout_logfile_maxbytes=20MB
+stdout_logfile_backups=10
+stopwaitsecs=3600
+environment=APP_ENV="production",QUEUE_CONNECTION="redis"

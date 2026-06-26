@@ -67,6 +67,7 @@
                         <th>Member ID</th>
                         <th>Voting Status</th>
                         <th>Voting Time</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody class="text-sm text-slate-500">
@@ -96,6 +97,9 @@
                         <td>{{ $participant->voting?->voting_time ?
                             \Carbon\Carbon::parse($participant->voting->voting_time)->format('d M Y H:i:s') : 'N/A' }}
                         </td>
+                        @auth
+                        <td>{{ $participant->voting?->candidate?->name ?? 'N/A' }}</td>
+                        @endauth
                     </tr>
                     @endforeach
                 </tbody>
