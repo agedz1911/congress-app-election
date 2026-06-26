@@ -55,9 +55,12 @@ new class extends Component
             return;
         }
 
-        $affectedRows = Voting::query()
+        $votings = Voting::withTrashed()
             ->whereIn('participant_id', $this->selectedParticipantIds)
-            ->delete();
+            ->get();
+
+        $affectedRows = $votings->count();
+        $votings->each->forceDelete();
 
         $this->feedbackMessage = $affectedRows > 0
             ? "Berhasil mereset status voting {$affectedRows} peserta terpilih."
@@ -70,7 +73,10 @@ new class extends Component
 
     public function resetAllVotingStatus(): void
     {
-        $affectedRows = Voting::query()->delete();
+        $votings = Voting::withTrashed()->get();
+
+        $affectedRows = $votings->count();
+        $votings->each->forceDelete();
 
         $this->feedbackMessage = $affectedRows > 0
             ? "Berhasil mereset semua data voting ({$affectedRows} data)."
