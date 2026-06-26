@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('votings', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('voting_number')->unique();
-            $table->foreignUuid('participant_id')->constrained('participants')->nullOnDelete();
-            $table->foreignUuid('candidate_id')->constrained('candidates')->nullOnDelete();
+            $table->foreignUuid('participant_id')->constrained('participants')->onDelete('cascade');
+            $table->foreignUuid('candidate_id')->constrained('candidates')->onDelete('cascade');
             $table->timestamp('voting_time')->nullable();
             $table->softDeletes();
             $table->timestamps();

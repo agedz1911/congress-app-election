@@ -2,17 +2,17 @@
     <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
             <!-- Brand / Event Info -->
-            <div class="flex items-center gap-4">
-                <a href="{{route('homepage')}}" wire:navigate>
+            <a href="{{route('homepage')}}" wire:navigate>
+                <div class="flex items-center gap-4">
                     <div class="w-20 h-20 rounded-xl flex items-center justify-center ">
                         <img src="{{ asset($icon) }}" alt="IUA Logo" class="w-full object-contain">
                     </div>
-                </a>
-                <div>
-                    <h1 class="font-bold text-lg text-primary tracking-tight leading-tight">{{ $title }}</h1>
-                    <p class="text-xs text-slate-500 font-medium mt-0.5">{{$venue}} | {{$date}}</p>
+                    <div>
+                        <h1 class="font-bold text-lg text-primary tracking-tight leading-tight">{{ $title }}</h1>
+                        <p class="text-xs text-slate-500 font-medium mt-0.5">{{$venue}} | {{$date}}</p>
+                    </div>
                 </div>
-            </div>
+            </a>
 
             <div class="text-right sm:text-right">
                 <div class="flex items-center gap-3">
