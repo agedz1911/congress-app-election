@@ -14,10 +14,10 @@
                 </div>
             </a>
 
-            <ul class="steps">
-                <li data-content="✓" class="step step-success">Scan Barcode</li>
-                <li data-content="2" class="step step-success">Vote</li>
-                <li data-content="3" class="step step-info">Selesai</li>
+            <ul class="steps" x-data="{ currentStep: 1 }" @voting-step-changed.window="currentStep = Number($event.detail.step ?? 1)">
+                <li class="step transition-all duration-300" :data-content="currentStep > 1 ? '✓' : '1'" :class="[currentStep >= 1 ? 'step-success' : 'step-info', currentStep === 1 ? 'animate-pulse' : '']">Scan Barcode</li>
+                <li class="step transition-all duration-300" :data-content="currentStep > 2 ? '✓' : '2'" :class="[currentStep >= 2 ? 'step-success' : 'step-info', currentStep === 2 ? 'animate-pulse' : '']">Vote</li>
+                <li class="step transition-all duration-300" :data-content="currentStep >= 3 ? '✓' : '3'" :class="[currentStep >= 3 ? 'step-success' : 'step-info', currentStep === 3 ? 'animate-pulse' : '']">Selesai</li>
             </ul>
         </div>
     </header>

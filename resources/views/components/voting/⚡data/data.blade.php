@@ -25,14 +25,28 @@
                     <i class="fa-regular fa-file-excel"></i>
                     Export Excel
                 </button>
-                <select
-                    class="border border-slate-200 bg-white text-xs font-medium text-slate-600 rounded-xl px-3 py-2 focus:ring-2 focus:ring-blue-100 outline-none">
-                    <option>-- PILIH AKSI --</option>
-                    <option>Kirim Pengingat (Belum Voting)</option>
-                    <option>Hapus Data Terpilih</option>
-                </select>
+                @auth
+                <button onclick="confirm_reset_selected_modal.showModal()" @disabled(count($selectedParticipantIds)===0)
+                    class="inline-flex items-center gap-2 px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold rounded-xl transition-colors duration-150 shadow-sm"
+                    type="button">
+                    <i class="fa fa-rotate-left"></i>
+                    Hapus Data Voting Terpilih
+                </button>
+                <button onclick="confirm_reset_all_modal.showModal()"
+                    class="inline-flex items-center gap-2 px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold rounded-xl transition-colors duration-150 shadow-sm"
+                    type="button">
+                    <i class="fa fa-trash-can"></i>
+                    Hapus Semua Data Voting
+                </button>
+                @endauth
             </div>
         </div>
+
+        @if ($feedbackMessage)
+        <div class="px-6 py-3 border-b border-slate-100 bg-slate-50 text-xs text-slate-600">
+            {{ $feedbackMessage }}
+        </div>
+        @endif
 
         <!-- Table Container (Responsive) -->
         <div class="overflow-x-auto">
@@ -41,7 +55,10 @@
                 <thead
                     class="bg-slate-50 text-xs font-semibold text-slate-600 uppercase tracking-wider border-b border-slate-100">
                     <tr>
-                        <th><input type="checkbox" class="checkbox checkbox-sm" /></th>
+                        <th>
+                            <input type="checkbox" class="checkbox checkbox-sm"
+                                wire:model.live="selectAllCurrentPage" />
+                        </th>
                         <th>No</th>
                         <th>Voting Number</th>
                         <th>Participant Code</th>
@@ -55,7 +72,10 @@
                 <tbody class="text-sm text-slate-500">
                     @foreach ($this->participants as $participant)
                     <tr>
-                        <td><input type="checkbox" class="checkbox checkbox-sm" /></td>
+                        <td>
+                            <input type="checkbox" class="checkbox checkbox-sm" value="{{ $participant->id }}"
+                                wire:model.live="selectedParticipantIds" />
+                        </td>
                         <th>{{ $loop->iteration }}</th>
                         <td>
 
@@ -82,8 +102,55 @@
             </table>
         </div>
         <div class="mt-4 px-6 py-4 text-xs text-slate-500">
+            <p class="mb-3">Dipilih: <strong>{{ count($selectedParticipantIds) }}</strong> peserta.</p>
             {{ $this->participants->links() }}
         </div>
 
     </div>
+
+    <dialog id="confirm_reset_selected_modal" class="modal">
+        <div class="modal-box">
+            <h3 class="font-bold text-lg">Konfirmasi Reset Voting Terpilih</h3>
+            <p class="py-4 text-sm text-slate-600">
+                Anda akan mereset status voting dari <strong>{{ count($selectedParticipantIds) }}</strong> peserta
+                terpilih menjadi
+                <strong>Belum Voting</strong>. Lanjutkan?
+            </p>
+            <div class="modal-action">
+                <form method="dialog">
+                    <button class="btn btn-ghost">Batal</button>
+                </form>
+                <button class="btn btn-warning" type="button" @disabled(count($selectedParticipantIds)===0)
+                    onclick="confirm_reset_selected_modal.close()" wire:click="resetSelectedVotingStatus">
+                    Ya, Reset Terpilih
+                </button>
+            </div>
+        </div>
+        <form method="dialog" class="modal-backdrop">
+            <button>Tutup</button>
+        </form>
+    </dialog>
+
+    <dialog id="confirm_reset_all_modal" class="modal">
+        <div class="modal-box">
+            <h3 class="font-bold text-lg">Konfirmasi Reset Semua Voting</h3>
+            <p class="py-4 text-sm text-slate-600">
+                Tindakan ini akan mereset <strong>semua status voting aktif</strong> menjadi <strong>Belum
+                    Voting</strong>.
+                Data peserta tidak dihapus. Lanjutkan?
+            </p>
+            <div class="modal-action">
+                <form method="dialog">
+                    <button class="btn btn-ghost">Batal</button>
+                </form>
+                <button class="btn btn-error" type="button" onclick="confirm_reset_all_modal.close()"
+                    wire:click="resetAllVotingStatus">
+                    Ya, Reset Semua
+                </button>
+            </div>
+        </div>
+        <form method="dialog" class="modal-backdrop">
+            <button>Tutup</button>
+        </form>
+    </dialog>
 </div>

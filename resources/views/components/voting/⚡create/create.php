@@ -18,6 +18,7 @@ new class extends Component
     public function mount()
     {
         $this->candidates = Candidate::orderBy('no_urut', 'asc')->get();
+        $this->syncStepIndicator();
     }
 
     public function submitParticipant(): void
@@ -45,7 +46,7 @@ new class extends Component
         $this->resetValidation();
         $this->selectedParticipant = $participant;
         $this->selectedCandidateId = null;
-        $this->step = 2;
+        $this->goToStep(2);
     }
 
     public function selectCandidate(string $candidateId): void
@@ -64,7 +65,7 @@ new class extends Component
 
     public function resetToStart(): void
     {
-        $this->step = 1;
+        $this->goToStep(1);
         $this->participantNumber = '';
         $this->selectedParticipant = null;
         $this->selectedCandidateId = null;
@@ -74,7 +75,7 @@ new class extends Component
     public function saveVoting(): void
     {
         if ($this->selectedParticipant === null) {
-            $this->step = 1;
+            $this->goToStep(1);
             $this->addError('participantNumber', 'Peserta belum dipilih.');
             return;
         }
@@ -88,7 +89,7 @@ new class extends Component
         $participantId = data_get($this->selectedParticipant, 'id');
 
         if ($participantId === null) {
-            $this->step = 1;
+            $this->goToStep(1);
             $this->addError('participantNumber', 'Data peserta tidak valid. Silakan scan ulang.');
             return;
         }
@@ -122,7 +123,18 @@ new class extends Component
             return;
         }
 
-        $this->step = 3;
+        $this->goToStep(3);
+    }
+
+    protected function goToStep(int $step): void
+    {
+        $this->step = $step;
+        $this->syncStepIndicator();
+    }
+
+    protected function syncStepIndicator(): void
+    {
+        $this->dispatch('voting-step-changed', step: (int) $this->step);
     }
 
     protected function generateVotingNumber(): string

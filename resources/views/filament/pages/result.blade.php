@@ -1,6 +1,4 @@
 <x-filament-panels::page>
     @include('components.styles')
-    <livewire:voting.create />
-    <livewire:voting.data />
-
+    <livewire:voting.result />
 </x-filament-panels::page>

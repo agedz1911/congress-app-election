@@ -9,8 +9,8 @@
         <div>
             {!! str($description)->markdown()->sanitizeHtml() !!}
             <div class="flex flex-col md:flex-row justify-center items-center gap-4 mt-4">
-                <a wire:navigate href="{{route('voting')}}" class="btn btn-primary">Vote Now</a>
-                <a wire:navigate href="{{route('chart')}}" class="btn btn-primary btn-outline">Live Result</a>
+                <a href="{{route('voting')}}" class="btn btn-primary">Vote Now</a>
+                <a href="{{route('chart')}}" class="btn btn-primary btn-outline">Live Result</a>
             </div>
         </div>
         

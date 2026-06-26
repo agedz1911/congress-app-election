@@ -3,6 +3,8 @@
 namespace App\Filament\Pages;
 
 use BackedEnum;
+use Filament\Actions\Action;
+use Filament\Actions\CreateAction;
 use Filament\Pages\Page;
 use Filament\Support\Icons\Heroicon;
 use UnitEnum;
@@ -10,7 +12,7 @@ use UnitEnum;
 class Voting extends Page
 {
     protected string $view = 'filament.pages.voting';
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::ChartPie;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::UserCircle;
 
     protected static ?string $navigationLabel = 'Votings';
 
